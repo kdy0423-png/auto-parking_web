@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>주차장 관리 시스템</title>
+  <style>
+    body { font-family: 'Malgun Gothic', sans-serif; text-align: center; margin: 20px; background-color: #ffffff; }
+    .floor-btn { padding: 12px 25px; margin: 5px; font-size: 16px; cursor: pointer; border: none; border-radius: 5px; background: #ddd; }
+    .active-btn { background-color: #007BFF; color: white; }
+    .floor { display: none; margin-top: 20px; }
+    .floor.active { display: block; }
+    .parking-row { margin-bottom: 20px; }
+    .parking-box {
+      width: 100px; height: 200px; display: inline-block; margin: 10px;
+      line-height: 200px; color: white; font-weight: bold; font-size: 18px;
+      border-radius: 10px; cursor: pointer; transition: 0.3s;
+    }
+    .empty {
+    width: 20px;   
+    height: 80px;  
+    display: inline-block; 
+    }
+
+    /* 상태별 색상 */
+    .available { background-color: #28a745; } /* 초록 */
+    .reserved { background-color: #ffc107; }  /* 주황(예약) */
+    .occupied { background-color: #dc3545; }  /* 빨강(주차중) */
+    
+    @media (max-width: 600px) {
+      .parking-box { width: 60px; height: 100px; line-height: 100px; font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>주차 관리 시스템</h1>
+
+<button class="floor-btn active-btn" onclick="showFloor('floor1', this)">A층</button>
+<button class="floor-btn" onclick="showFloor('floor2', this)">B층</button>
+
+<div id="floor1" class="floor active">
+  <div class="parking-row">
+    <div id="spot0" class="parking-box available" onclick="clickSpot(0)">A1</div>
+    <div id="spot1" class="parking-box available" onclick="clickSpot(1)">A2</div>
+    <div id="spot2" class="parking-box available" onclick="clickSpot(2)">A3</div>
+    <div id="spot3" class="parking-box available" onclick="clickSpot(3)">A4</div>
+    <div id="spot4" class="parking-box available" onclick="clickSpot(4)">A5</div>
+    <div id="spot5" class="parking-box available" onclick="clickSpot(5)">A6</div>
+  </div>
+  
+  <div class="empty"></div>
+
+  <div class="parking-row">
+     <div class="parking-box available" >A7</div>
+    <div class="parking-box available" >A8</div>
+    <div class="parking-box available" >A9</div>
+    <div class="parking-box available" >A10</div>
+    <div class="parking-box available" >A11</div>
+    <div class="parking-box available" >A12</div>
+  </div>
+</div>
+
+<div id="floor2" class="floor">
+  <div class="parking-row">
+    <div id="spot6" class="parking-box available" onclick="clickSpot(6)">B1</div>
+    <div id="spot7" class="parking-box available" onclick="clickSpot(7)">B2</div>
+    <div id="spot8" class="parking-box available" onclick="clickSpot(8)">B3</div>
+    <div id="spot9" class="parking-box available" onclick="clickSpot(9)">B4</div>
+    <div id="spot10" class="parking-box available" onclick="clickSpot(10)">B5</div>
+    <div id="spot11" class="parking-box available" onclick="clickSpot(11)">B6</div>
+</div>
+    </div>
+</div>
+
+<div id="data-box" style="margin-top: 20px; font-weight: bold;">센서 값 대기 중...</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
