@@ -17,13 +17,13 @@
       border-radius: 10px; cursor: pointer; transition: 0.3s;
     }
     .empty {
-    width: 20px;   
-    height: 80px;  
-    display: inline-block; 
+      width: 20px;   
+      height: 80px;  
+      display: inline-block; 
     }
 
     /* 상태별 색상 */
-    .available { background-color: #28a745; } /* 초록 */
+    .available { background-color: #28a745; } /* 초록(빈자리) */
     .reserved { background-color: #ffc107; }  /* 주황(예약) */
     .occupied { background-color: #dc3545; }  /* 빨강(주차중) */
     
@@ -52,12 +52,12 @@
   <div class="empty"></div>
 
   <div class="parking-row">
-     <div class="parking-box available" >A7</div>
-    <div class="parking-box available" >A8</div>
-    <div class="parking-box available" >A9</div>
-    <div class="parking-box available" >A10</div>
-    <div class="parking-box available" >A11</div>
-    <div class="parking-box available" >A12</div>
+    <div id="spot12" class="parking-box available">A7</div>
+    <div id="spot13" class="parking-box available">A8</div>
+    <div id="spot14" class="parking-box available">A9</div>
+    <div id="spot15" class="parking-box available">A10</div>
+    <div id="spot16" class="parking-box available">A11</div>
+    <div id="spot17" class="parking-box available">A12</div>
   </div>
 </div>
 
@@ -69,14 +69,56 @@
     <div id="spot9" class="parking-box available" onclick="clickSpot(9)">B4</div>
     <div id="spot10" class="parking-box available" onclick="clickSpot(10)">B5</div>
     <div id="spot11" class="parking-box available" onclick="clickSpot(11)">B6</div>
-</div>
-    </div>
+  </div>
 </div>
 
 <div id="data-box" style="margin-top: 20px; font-weight: bold;">센서 값 대기 중...</div>
 
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-<script src="main.js"></script>
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<script>
+  // 1. 층 전환용 함수 (기존 main.js에 있던 내용을 내장)
+  function showFloor(floorId, btn) {
+    document.querySelectorAll('.floor').forEach(f => f.classList.remove('active'));
+    document.querySelectorAll('.floor-btn').forEach(b => b.classList.remove('active-btn'));
+    document.getElementById(floorId).classList.add('active');
+    btn.classList.add('active-btn');
+  }
+
+  // 2. 주차 칸 클릭 함수 (예약 기능 등)
+  function clickSpot(spotId) {
+    alert("주차 공간 " + spotId + "번을 선택하셨습니다.");
+  }
+
+  // 3. ⚠️ 중요: ngrok에서 발급받은 실제 주소로 변경해 주세요!
+  const NGROK_URL = "https://xxxx-xxxx.ngrok-free.app"; 
+  const socket = io(NGROK_URL);
+
+  // 4. 아두이노 실시간 데이터 수신 및 화면 제어
+  socket.on('arduino-data', (data) => {
+    // 하단 텍스트 박스에 현재 센서 값 찍어주기
+    document.getElementById('data-box').innerText = "현재 아두이노 센서 값: " + data;
+
+    // 예시: 아두이노 조도센서나 거리센서 값이 500 이상이면 A1 자리에 차가 들어온 것으로 간주 (Occupied)
+    // 본인의 센서 기준 값에 맞춰 숫자를 조절하세요.
+    const sensorValue = parseInt(data);
+    const targetSpot = document.getElementById('spot0'); // 예시로 A1번 자리를 제어
+
+    if (targetSpot) {
+      if (sensorValue > 500) { 
+        // 차가 있는 경우 -> 초록색 빼고 빨간색(occupied) 추가
+        targetSpot.classList.remove('available');
+        targetSpot.classList.add('occupied');
+      } else {
+        // 자리가 빈 경우 -> 빨간색 빼고 초록색(available) 추가
+        targetSpot.classList.remove('occupied');
+        targetSpot.classList.add('available');
+      }
+    }
+  });
+
+  socket.on('connect', () => {
+    console.log("맥북 Node.js 서버 연동 성공! 🚀");
+  });
+</script>
 </body>
 </html>
