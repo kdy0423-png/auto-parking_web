@@ -17,7 +17,7 @@ console.log("==========================================");\
 \
 // 2. \uc0\u47589 \u48513  \u50500 \u46160 \u51060 \u45432  \u54252 \u53944  \u49444 \u51221 \
 // \uc0\u55357 \u56481  [\u54596 \u49688  \u52404 \u53356 ] \u47589 \u48513  \u53552 \u48120 \u45328 \u50640  'ls /dev/tty.usb*'\u47484  \u52432 \u49436  \u45208 \u50724 \u45716  \u48376 \u51064 \u51032  \u54252 \u53944  \u51060 \u47492 \u51004 \u47196  \u48148 \u44984 \u49464 \u50836 !\
-const arduinoPort = '/dev/tty.usbmodem14101'; \
+const arduinoPort = '//dev/tty.usbserial-140'; \
 \
 const port = new SerialPort(\{\
   path: arduinoPort,\
